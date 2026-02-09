@@ -7,7 +7,7 @@ CORS(app)  # Tillater forespørsler fra frontend
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="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",
+    api_key="PASTE YOUR API",
 )
 
 def format_bot_reply(reply):
@@ -40,4 +40,5 @@ def chat():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
+
     app.run(debug=True)
