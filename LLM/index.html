@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1e1e2f; /* Mørk bakgrunn */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #00bcd4; /* Lys turkis farge */
+        }
+
+        /* Chatbox container */
+        #chatbox {
+            width: 400px;
+            height: 500px;
+            overflow-y: auto;
+            border-radius: 10px;
+            background-color: #2f2f45; /* Litt lysere bakgrunn for chatboksen */
+            padding: 20px;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* User and Bot message styles */
+        .user, .bot {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+
+        .user {
+            background-color: #00bcd4; /* Turkis for bruker */
+            align-self: flex-end;
+            color: white;
+            text-align: right;
+        }
+
+        .bot {
+            background-color: #3a3a54; /* Grå-lilla for bot */
+            color: white;
+            text-align: left;
+        }
+
+        /* User Input and Button */
+        input, button {
+            font-size: 1rem;
+            padding: 10px;
+            margin: 10px;
+            width: 70%;
+            border-radius: 5px;
+            border: none;
+        }
+
+        input {
+            background-color: #3a3a54;
+            color: white;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #00bcd4;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #008c9e;
+        }
+
+        /* Responsivitet */
+        @media (max-width: 600px) {
+            #chatbox {
+                width: 90%;
+                height: 400px;
+            }
+            input, button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chat-container">
+        <h1>AI Chatbot</h1>
+        <div id="chatbox"></div>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <input type="text" id="userInput" placeholder="Skriv en melding..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let userInput = document.getElementById("userInput").value;
+            let chatbox = document.getElementById("chatbox");
+
+            if (!userInput) return;
+
+            // Vis brukerens melding
+            chatbox.innerHTML += `<div class="user">${userInput}</div>`;
+            document.getElementById("userInput").value = "";
+
+            fetch("http://127.0.0.1:5000/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let botReply = data.reply || "⚠ Ingen svar fra AI-en.";
+                // Vis botens svar
+                chatbox.innerHTML += `<div class="bot">${botReply}</div>`;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            })
+            .catch(error => console.error("Feil:", error));
+        }
+    </script>
+
+</body>
+</html>
