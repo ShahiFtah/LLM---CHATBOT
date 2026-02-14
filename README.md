@@ -1,4 +1,4 @@
-Basic chatbot created in Python environment.
+Basic AI chatbot created in Python environment.
 Frontend - HTML/CSS
 Backend - Python
 
